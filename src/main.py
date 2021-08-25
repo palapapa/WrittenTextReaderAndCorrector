@@ -44,7 +44,7 @@ def main() -> None:
         "-o",
         "--out",
         action="store",
-        nargs="?",
+        nargs=1,
         required=True,
         metavar="path",
         help="Path to the output file. A new file will be created if the provided path does not exist.",
@@ -70,7 +70,6 @@ def main() -> None:
     before_auto_correct: list[str] = list()
     after_auto_correct: list[list[symspellpy.symspellpy.SuggestItem]] = list(list())
     symspell: symspellpy.SymSpell = symspellpy.SymSpell()
-    dictionary_path: str = pkg_resources.resource_filename("symspellpy", "frequency_dictionary_en_82_765.txt")
     bigram_path: str = pkg_resources.resource_filename("symspellpy", "frequency_bigramdictionary_en_243_342.txt")
     symspell.load_bigram_dictionary(bigram_path, term_index=0, count_index=2)
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -94,7 +93,7 @@ def main() -> None:
     else:
         result = "\n".join(before_auto_correct)
     try:
-        with open(arguments.output_path, "a+") as output:
+        with open(arguments.output_path[0], "a+") as output:
             output.write(result)
     except EnvironmentError as e:
         print(f"FAILED: The output file cannot be written to.({str(e)})")
